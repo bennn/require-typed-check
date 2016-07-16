@@ -1,5 +1,8 @@
 #lang typed/racket/base
 
+;; Larger test, taken from gradual typing benchmark.
+;; Uses #:struct
+
 (module automata typed/racket
 
     ;; An N-states, N-inputs Automaton
@@ -18,8 +21,9 @@
      clone
      automaton-payoff
      ;; --
-     automaton?
-     Automaton
+     (struct-out automaton)
+     ;automaton?
+     ;Automaton
      ;Payoff
     )
      (: defects (-> Payoff Automaton))
@@ -173,6 +177,7 @@
 
 (module automata-adapted typed/racket
 
+    (define-type Automaton automaton)
     (define-type Probability Nonnegative-Real)
     (define-type Population (cons Automaton* Automaton*))
     (define-type Automaton* [Vectorof Automaton])
@@ -182,9 +187,13 @@
     (define-type Transition* [Vectorof Transition])
     (define-type Transition [Vectorof State])
 
-    (require/typed (submod ".." automata)
-     [#:opaque Automaton automaton?]
-     (automaton-payoff (-> Automaton Payoff))
+    (require require-typed-check)
+    (require/typed/check (submod ".." automata)
+     ;[#:opaque Automaton automaton?]
+    (#:struct automaton ({current : State}
+                       {original : State}
+                       {payoff : Payoff}
+                       {table : Transition*}))
      (defects (-> Payoff Automaton))
      (cooperates (-> Payoff Automaton))
      (tit-for-tat (-> Payoff Automaton))
@@ -294,7 +303,8 @@
 
     ;; =============================================================================
     (require (submod ".." automata-adapted))
-    (require/typed (submod ".." utilities)
+    (require require-typed-check)
+    (require/typed/check (submod ".." utilities)
      (choose-randomly
       (-> [Listof Probability] Natural [#:random (U False Real)] [Listof Natural]))
     )
@@ -373,7 +383,8 @@
 
     ;; =============================================================================
     (require (submod ".." automata-adapted))
-    (require/typed (submod ".." population)
+    (require require-typed-check)
+    (require/typed/check (submod ".." population)
      (build-random-population
       (-> Natural Population))
      (population-payoffs (-> Population [Listof Payoff]))
@@ -382,15 +393,19 @@
      (match-up*
       (-> Population Natural Population))
     )
-    (require/typed (submod ".." utilities)
+    (require/typed/check (submod ".." utilities)
      (relative-average (-> [Listof Real] Real Real))
+    )
+    (require/typed/check (submod ".." utilities)
+     (choose-randomly
+      (-> [Listof Probability] Natural [#:random (U False Real)] [Listof Natural]))
     )
 
     ;; effect: run timed simulation, create and display plot of average payoffs
     ;; effect: measure time needed for the simulation
     (define (main)
        (simulation->lines
-        (evolve (build-random-population 100) 1000 10 20))
+        (evolve (build-random-population 100) 500 10 20))
        (void))
 
     (: simulation->lines (-> [Listof Payoff] [Listof [List Integer Real]]))
@@ -420,8 +435,9 @@
     ;; -----------------------------------------------------------------------------
     (provide main)
 )
-(require 'main)
-(require/typed racket/sandbox
-  (call-with-limits (-> Natural Natural (-> Void) Void)))
-(call-with-limits 20 10 ;; TONS of time
-  (lambda () (void (time (main)))))
+
+(module+ test
+    (require (submod ".." main) require-typed-check)
+    (require typed/racket/sandbox)
+    (#{call-with-limits @ Void} 20 #f ;; TONS of time
+      (lambda () (begin (time (main)) (values (void))))))
