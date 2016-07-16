@@ -4,4 +4,8 @@
 \.\#*
 \#*
 
+scribblings/*.css
+scribblings/*.js
+scribblings/*.html
+
 compiled/
