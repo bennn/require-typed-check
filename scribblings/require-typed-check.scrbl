@@ -17,22 +17,17 @@
   Known limitations:
   @itemlist[
     @item{
-      All submodules of a Typed Racket module are assumed typed.
-      Do not use @racket[require/typed/check] to import a submodule
-       (you will get type checker errors about "missing type for identifier").
+      All submodules of the current module are assumed untyped.
+      The current implementation would need to compile the module's submodules
+       to be sure; it breaks the circular dependency by assuming the worst.
     }
     @item{
       Does not generate type definitions from @racket[#:opaque] imports
        (but does require the predicate).
-      Use @racket[require/typed] instead.
-
       For example, after @racket[(require/typed/check .... [#:opaque Foo foo?])],
        the predicate @racket[foo?] will be usable but the type @racket[Foo] will
        not be.
-    }
-    @item{
-      @racket[(require/typed/check 'foo ....)] does not work at all and generates
-       a confusing error message.
+      Use @racket[require/typed] instead.
     }
   ]
 }

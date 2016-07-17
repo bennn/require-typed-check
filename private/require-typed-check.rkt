@@ -7,7 +7,7 @@
 )
 
 (require
-  (for-syntax racket/base)
+  (for-syntax racket/base syntax/location)
   (only-in typed/racket require/typed)
   (rename-in typed/racket/no-check [require/typed require/typed/no-check]))
 
@@ -29,20 +29,49 @@
 (define-for-syntax typed-lib?
   (let ([cache (make-hash)])
     (λ (lib-stx)
-      (let ([lib (syntax->datum lib-stx)])
+      (let* ([lib (syntax->datum lib-stx)]
+             [dyn-path (and (not (relative-submod? lib))
+                            (append
+                              (if (submod? lib)
+                                (resolve-submod (syntax-source-file-name lib-stx) lib)
+                                (list 'submod lib))
+                              '(#%type-decl)))])
         (hash-ref! cache lib
           (λ () ;; Typed Racket always installs a `#%type-decl` submodule
             (parameterize ([current-namespace (make-base-namespace)])
               (with-handlers ([exn:fail:contract? (lambda (exn) #f)])
-                (dynamic-require lib #f '(#%type-decl))
-                #t))))))))
+                (and dyn-path
+                     (dynamic-require dyn-path #f)
+                     #t)))))))))
+
+;; : Require-Spec -> Boolean
+(define-for-syntax (submod? x)
+  (and (list? x) (not (null? x)) (eq? 'submod (car x))))
+
+;; : Require-Spec -> Boolean
+(define-for-syntax (relative-submod? x)
+  (and (submod? x)
+       (not (null? (cdr x)))
+       (or (string=? "." (cadr x))
+           (string=? ".." (cadr x)))))
+
+;; : Submod-Path -> Module-Path
+(define-for-syntax (resolve-submod src l)
+  (case (cadr l)
+   [(".." ".")
+    ;; Circular dependency issue ... cannot compile the module without
+    ;;  compiling the module's submodules.
+    (raise-argument-error 'require/typed/check "Non-relative submodule" l)]
+   [else
+    l]))
 
 (define-syntax (require/typed/check stx)
   (syntax-case stx ()
    [(_ lib clause* ...)
-    (if (typed-lib? #'lib)
-      (syntax/loc stx (require/typed lib clause* ...))
-      (syntax/loc stx (require/typed/no-check lib clause* ...)))]
+    (begin
+      (if (typed-lib? #'lib)
+        (syntax/loc stx (require/typed/no-check lib clause* ...))
+        (syntax/loc stx (require/typed lib clause* ...))))]
    ;; Default to `require/typed` on bad syntax
    [(_ lib)
     (syntax/loc stx (require/typed lib))]
