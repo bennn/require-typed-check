@@ -1,5 +1,8 @@
 require-typed-check
 ===
+[![Build Status](https://travis-ci.org/bennn/require-typed-check.svg)](https://travis-ci.org/bennn/require-typed-check)
+[![Coverage Status](https://coveralls.io/repos/bennn/require-typed-check/badge.svg?branch=master&service=github)](https://coveralls.io/github/bennn/require-typed-check?branch=master)
+[![Scribble](https://img.shields.io/badge/Docs-Scribble-blue.svg)](http://docs.racket-lang.org/require-typed-check/index.html)
 
 If you want to require a module `m` but are not sure whether `m` is a Racket or
  Typed Racket module, try:
