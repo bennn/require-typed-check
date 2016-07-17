@@ -17,6 +17,11 @@
   Known limitations:
   @itemlist[
     @item{
+      Type annotations are @bold{completely ignored} when importing from a typed
+       module.
+      The annotations can be wrong; they just get erased.
+    }
+    @item{
       All submodules of the current module are assumed untyped.
       The current implementation would need to compile the module's submodules
        to be sure; it breaks the circular dependency by assuming the worst.
