@@ -33,7 +33,7 @@
              [dyn-path (and (not (relative-submod? lib))
                             (append
                               (if (submod? lib)
-                                (resolve-submod (syntax-source-file-name lib-stx) lib)
+                                (resolve-submod #f #;(syntax-source-file-name lib-stx) lib)
                                 (list 'submod lib))
                               '(#%type-decl)))])
         (hash-ref! cache lib
