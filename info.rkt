@@ -1,6 +1,6 @@
 #lang info
 (define collection "require-typed-check")
-(define deps '("base" "typed-racket-lib"))
+(define deps '("base" "typed-racket-lib" "typed-racket-more"))
 (define build-deps '("scribble-lib" "racket-doc" "rackunit-lib"))
 (define pkg-desc "require/typed without contracts")
 (define version "0.1")
