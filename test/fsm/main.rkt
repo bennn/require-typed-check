@@ -22,13 +22,6 @@
  (relative-average (-> [Listof Real] Real Real))
 )
 
-;; effect: run timed simulation, create and display plot of average payoffs
-;; effect: measure time needed for the simulation
-(define (main)
-   (simulation->lines
-    (evolve (build-random-population 100) 500 10 20))
-   (void))
-
 (: simulation->lines (-> [Listof Payoff] [Listof [List Integer Real]]))
 ;; turn average payoffs into a list of Cartesian points 
 (define (simulation->lines data)
@@ -53,10 +46,17 @@
            ;; even though it is explicitly typed ... [Listof Payoff]
            (evolve p3 (- c 1) s r))]))
 
+;; effect: run timed simulation, create and display plot of average payoffs
+;; effect: measure time needed for the simulation
+(define (main)
+   (simulation->lines
+    (evolve (build-random-population 100) 500 10 20))
+   (void))
+
 ;; -----------------------------------------------------------------------------
 
 (module+ test
   (require require-typed-check)
   (require typed/racket/sandbox)
   (#{call-with-limits @ Void} 20 #f ;; TONS of time
-    (lambda () (begin (time (main)) (values (void))))))
+    (lambda () (begin (main) (values (void))))))

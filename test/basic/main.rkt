@@ -2,10 +2,10 @@
 
 (require require-typed-check)
 (require/typed/check require-typed-check/test/basic/untyped
-  (f (-> Natural Natural (Vectorof Any) Any)))
+  (f (-> Natural Natural (Vectorof Boolean) Any)))
 
 (require/typed/check require-typed-check/test/basic/typed
-  (g (-> Natural Natural (Vectorof Any) Any)))
+  (g (-> Natural Natural (Vectorof Boolean) Any)))
 
 (module+ test
   (require typed/rackunit)

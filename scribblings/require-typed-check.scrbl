@@ -17,22 +17,13 @@
   Known limitations:
   @itemlist[
     @item{
-      Type annotations are @bold{completely ignored} when importing from a typed
-       module.
-      The annotations can be wrong; they just get erased.
-    }
-    @item{
       All submodules of the current module are assumed untyped.
       The current implementation would need to compile the module's submodules
        to be sure; it breaks the circular dependency by assuming the worst.
     }
     @item{
-      Does not generate type definitions from @racket[#:opaque] imports
-       (but does require the predicate).
-      For example, after @racket[(require/typed/check .... [#:opaque Foo foo?])],
-       the predicate @racket[foo?] will be usable but the type @racket[Foo] will
-       not be.
-      Use @racket[require/typed] instead.
+      Any @racket[#:opaque] imports are required via @racket[require/typed].
+      (Previously, they weren't imported at all --- now they're imported under contract.)
     }
   ]
 }

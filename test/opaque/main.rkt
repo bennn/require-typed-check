@@ -18,14 +18,7 @@
   ;; Can use type from untyped module
   (define-type Foo Untyped)
 
-  ;; Cannot use type from typed module
-  (check-exn #rx"type name `Typed' is unbound"
-    (lambda ()
-      (compile-syntax
-        #'(module t typed/racket/base
-            (require require-typed-check)
-            (require/typed/check require-typed-check/test/opaque/typed
-              (#:opaque Typed typed?))
-            (define-type Bar Typed)))))
-
+  ;; Can use type from typed module, too
+  ;;  though it goes through a contract
+  (define-type Bar Typed)
 )

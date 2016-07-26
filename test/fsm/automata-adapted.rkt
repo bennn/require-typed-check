@@ -12,7 +12,7 @@
 
 (require require-typed-check)
 (require/typed/check require-typed-check/test/fsm/automata
- ;[#:opaque Automaton automaton?]
+;[#:opaque Automaton automaton?]
 (#:struct automaton ({current : State}
                    {original : State}
                    {payoff : Payoff}

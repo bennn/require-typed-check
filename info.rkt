@@ -3,6 +3,6 @@
 (define deps '("base" "typed-racket-lib" "typed-racket-more"))
 (define build-deps '("scribble-lib" "racket-doc" "rackunit-lib"))
 (define pkg-desc "require/typed without contracts")
-(define version "0.1")
+(define version "0.2")
 (define pkg-authors '(ben))
 (define scribblings '(("scribblings/require-typed-check.scrbl" () ("scripting"))))
