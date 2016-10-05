@@ -5,4 +5,4 @@
 (define pkg-desc "require/typed without contracts")
 (define version "0.2")
 (define pkg-authors '(ben))
-(define scribblings '(("scribblings/require-typed-check.scrbl" () ("scripting"))))
+(define scribblings '(("scribblings/require-typed-check.scrbl" () ("Performance"))))
