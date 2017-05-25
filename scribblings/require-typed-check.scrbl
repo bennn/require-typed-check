@@ -1,4 +1,11 @@
 #lang scribble/manual
+@require[
+  scribble/example
+  (for-label
+    typed/racket/base
+    (only-in racket/contract has-contract?)
+    math
+    require-typed-check)]
 
 @title[#:tag "top"]{@tt{require-typed-check}}
 @author[@hyperlink["https://github.com/bennn"]{Ben Greenman}]
@@ -28,3 +35,20 @@
   ]
 }
 
+@examples[#:eval (make-base-eval)
+(module t typed/racket
+  (require require-typed-check)
+  (require/typed/check math
+    (divides? (-> Integer Integer Boolean)))
+  (require/typed/check racket/contract
+    (has-contract? (-> Any Boolean)))
+
+  (define (check-contract id)
+    (printf "~a does~a have a contract~n"
+      (object-name id)
+      (if (has-contract? id) "" " not")))
+
+  (check-contract divides?)
+  (check-contract has-contract?))
+(require 't)
+]
