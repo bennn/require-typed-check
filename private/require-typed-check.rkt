@@ -82,13 +82,13 @@
     (pattern nm:id
       #:with orig-nm #'nm
       #:with spec #'nm)
-    (pattern (orig-nm:id internal-nm:id)
-      #:with spec #'(orig-nm internal-nm)
-      #:with nm #'internal-nm))
+    (pattern (orig-nm:id nm:id)
+      #:with spec #'(orig-nm internal-nm)))
 
   (define-syntax-class simple-clause
     #:attributes (nm ty)
-    (pattern [nm:opt-rename ty]))
+    (pattern [spec:opt-rename ty]
+     #:attr nm #'spec.nm))
 
   (define-splicing-syntax-class (struct-opts struct-name)
     #:attributes (ctor-value type)
