@@ -30,7 +30,7 @@ Through [pkgs.racket-lang.org](http://pkgs.racket-lang.org/):
 From source:
 
 ```
-> git clone https://github.com/nuprl/require-typed-check
+> git clone https://github.com/bennn/require-typed-check
 > raco pkg install ./require-typed-check
 ```
 
