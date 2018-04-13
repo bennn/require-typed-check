@@ -7,7 +7,7 @@
 )
 
 (require
-  (for-syntax racket/base syntax/location syntax/parse)
+  (for-syntax racket/base syntax/location syntax/parse require-typed-check/private/log)
   (only-in typed/racket require/typed)
   (rename-in typed/racket/no-check [require/typed require/typed/no-check]))
 
@@ -140,6 +140,18 @@
       (pattern sc:simple-clause
         #:attr ann #'(ann sc.nm sc.ty)
         #:attr req #'#f))
+
+  (define (syntax->serializable-source stx)
+    (define src (syntax-source stx))
+    (if (path? src)
+      (path->string src)
+      src))
+
+  (define (log-require-typed-check stx)
+    ;; log information about a whole require/typed/check clause
+    (define src (syntax->serializable-source stx))
+    (define rtc-info (require-typed-check-info src (syntax->datum stx)))
+    (log-require-typed-check-info "~s" rtc-info))
 )
 ;; -----------------------------------------------------------------------------
 
@@ -147,6 +159,7 @@
   (syntax-parse stx
    [(_ lib clause* ...)
     (begin
+      (log-require-typed-check stx)
       (if (not (typed-lib? #'lib))
         ;; then : do a normal require/typed
         (syntax/loc stx (require/typed lib clause* ...))
