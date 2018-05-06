@@ -13,6 +13,9 @@
 
 ;; =============================================================================
 
+(define-for-syntax disable-require-typed-check?
+  (and (getenv "DISABLE_REQUIRE_TYPED_CHECK") #true))
+
 ;; Q. Is the typed-lib cache worth using?
 ;;
 ;; Here are some timings from `test/` files, collected by running
@@ -160,7 +163,7 @@
    [(_ lib clause* ...)
     (begin
       (log-require-typed-check stx)
-      (if (not (typed-lib? #'lib))
+      (if (or disable-require-typed-check? (not (typed-lib? #'lib)))
         ;; then : do a normal require/typed
         (syntax/loc stx (require/typed lib clause* ...))
         ;; else : do a no-check require/typed, but do check the type annotations

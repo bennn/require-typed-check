@@ -3,9 +3,10 @@
   scribble/example
   (for-label
     typed/racket/base
-    (only-in racket/contract has-contract?)
+    (only-in racket/contract any/c has-contract?)
     math
-    require-typed-check)]
+    require-typed-check
+    require-typed-check/logging)]
 
 @title[#:tag "top"]{@tt{require-typed-check}}
 @author[@hyperlink["https://github.com/bennn"]{Ben Greenman}]
@@ -52,3 +53,30 @@
   (check-contract has-contract?))
 (require 't)
 ]
+
+
+@section{Type-Boundary Instrumentation}
+
+To disable @racket[require/typed/check], set the environment variable
+ @as-index{@litchar{DISABLE_REQUIRE_TYPED_CHECK}} to any kind of value.
+This causes all @racket[require/typed/check] forms to expand to
+ @racket[require/typed] forms.
+
+@defmodule[require-typed-check/logging]{
+  Expanding a @racket[require/typed/check] form logs an event to the
+   @indexed-racket['require-typed-check] topic.
+}
+
+@defthing[require-typed-check-logger logger?]{
+  A logger for @racketmodname[require-typed-check].
+}
+
+Log events report the importing module and the syntax of the @racket[require/typed/check] form.
+This data is package in an instance of a prefab struct:
+
+@defstruct*[require-typed-check-info ([src string?] [sexp any/c]) #:prefab]{
+  Contains the source and value of a @racket[require/typed/check] syntax object.
+  The source @racket[src] comes from @racket[syntax-source]
+   and the value @racket[sexp] comes from @racket[syntax->datum].
+}
+
