@@ -41,11 +41,9 @@
                               '(#%type-decl)))])
         (hash-ref! cache lib
           (λ () ;; Typed Racket always installs a `#%type-decl` submodule
-            (parameterize ([current-namespace (make-base-namespace)])
-              (with-handlers ([exn:fail:contract? (lambda (exn) #f)])
-                (and dyn-path
-                     (dynamic-require dyn-path #f)
-                     #t)))))))))
+            (and dyn-path
+                 (module-declared? dyn-path #true)
+                 #true)))))))
 
 ;; : Require-Spec -> Boolean
 (define-for-syntax (submod? x)
