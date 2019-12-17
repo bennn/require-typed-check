@@ -4,7 +4,6 @@
   (for-label
     typed/racket/base
     (only-in racket/contract any/c has-contract?)
-    math
     require-typed-check
     require-typed-check/logging)]
 
@@ -39,17 +38,19 @@
 @examples[#:eval (make-base-eval)
 (module t typed/racket
   (require require-typed-check)
-  (require/typed/check math
-    (divides? (-> Integer Integer Boolean)))
-  (require/typed/check racket/contract
+
+  (require/typed/check racket/math
+    ((sqr square) (-> Integer Integer)))
+
+  (require/typed racket/contract
     (has-contract? (-> Any Boolean)))
 
   (define (check-contract id)
     (printf "~a does~a have a contract~n"
       (object-name id)
-      (if (has-contract? id) "" " not")))
+      (if (has-contract? id) "" " NOT")))
 
-  (check-contract divides?)
+  (check-contract square)
   (check-contract has-contract?))
 (require 't)
 ]
