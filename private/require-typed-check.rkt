@@ -173,7 +173,7 @@
           #:with (ann* ...) (for/list ([ann (in-list (syntax-e #'(c*.ann ...)))]
                                        #:when (syntax-e ann))
                               ann)
-          (quasisyntax/loc stx
+          (syntax/loc stx
             (begin
               (require/typed/no-check lib clause* ...)
               req* ...        ;; Import opaque types
