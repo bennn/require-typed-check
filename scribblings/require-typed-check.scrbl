@@ -65,7 +65,7 @@ This causes all @racket[require/typed/check] forms to expand to
 
 @defmodule[require-typed-check/logging]{
   Expanding a @racket[require/typed/check] form logs an event to the
-   @indexed-racket['require-typed-check] topic.
+   @indexed-racket['require-typed-check] topic at the @racket['info] level.
 }
 
 @defthing[require-typed-check-logger logger?]{
