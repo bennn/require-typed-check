@@ -5,6 +5,7 @@
     typed/racket/base
     (only-in racket/contract any/c has-contract?)
     require-typed-check
+    (only-in typed/racket/unsafe unsafe-require/typed)
     require-typed-check/logging)]
 
 @title[#:tag "top"]{@tt{require-typed-check}}
@@ -30,9 +31,14 @@
     }
     @item{
       Any @racket[#:opaque] imports are required via @racket[require/typed].
-      (Previously, they weren't imported at all --- now they're imported under contract.)
+    }
+    @item{
+      This form is intended for modules written in @hash-lang[] @racketmodname[typed/racket] or @racketmodname[typed/racket/base].
+      For Shallow and Optional modules, use the other forms below.
     }
   ]
+
+  @history[#:changed "0.3" @elem{Added support for @racket[#:opaque].}]
 }
 
 @examples[#:eval (make-base-eval)
@@ -56,7 +62,41 @@
 ]
 
 
-@section{Type-Boundary Instrumentation}
+@section{Alternative Semantics for @racket[require/typed]}
+
+The behavior of @racket[require/typed] depends on the current Typed Racket language.
+Deep, Shallow, and Optional types have different behavior.
+To choose a behavior, use one of the following @racket[require/typed/check] variants.
+
+@subsection{Deep @racketmodname[require-typed-check]}
+@defmodule[require-typed-check/deep]
+@defform[(require/typed/check/deep m rt-clause ...)]{
+@history[#:added "1.0"]
+}
+
+@subsection{Shallow @racketmodname[require-typed-check]}
+@defmodule[require-typed-check/shallow]
+@defform[(require/typed/check/shallow m rt-clause ...)]{
+@history[#:added "1.0"]
+}
+
+@subsection{Optional @racketmodname[require-typed-check]}
+@defmodule[require-typed-check/optional]
+@defform[(require/typed/check/optional m rt-clause ...)]{
+@history[#:added "1.0"]
+}
+
+@subsection{Unsafe @racketmodname[require-typed-check]}
+@defmodule[require-typed-check/unsafe]
+@defform[(unsafe-require/typed/check m rt-clause ...)]{
+  Expands to either @racket[unsafe-require/typed] or a plain @racket[require],
+  depending on whether @racket[m] is typed or untyped.
+  Useful with @racket[#:struct] imports to avoid creating new struct types.
+
+  @history[#:added "1.0"]
+}
+
+@section{Type Boundary Instrumentation}
 
 To disable @racket[require/typed/check], set the environment variable
  @as-index{@litchar{DISABLE_REQUIRE_TYPED_CHECK}} to any kind of value.
