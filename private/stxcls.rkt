@@ -60,11 +60,11 @@
   (pattern [(~or (~datum opaque) #:opaque) opaque ty:id pred:id #:name-exists]
     #:with opt #'(#:name-exists)))
 
-(define-syntax-class (clause lib)
+(define-syntax-class (clause lib rt-id)
   #:attributes (ann req)
     (pattern oc:opaque-clause
       #:attr ann #'#f
-      #:attr req #`(require/typed #,lib (#:opaque oc.ty oc.pred . oc.opt)))
+      #:attr req #`(#,rt-id #,lib (#:opaque oc.ty oc.pred . oc.opt)))
     (pattern (~var strc struct-clause)
       #:attr ann #'#f
       #:attr req #'#f)

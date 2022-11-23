@@ -38,7 +38,7 @@
             (syntax/loc stx (require/typed lib clause* (... ...)))
             ;; else : do a no-check require/typed, but do check the type annotations
             (syntax-parse #'(clause* (... ...))
-             [((~var c* (clause #'lib)) (... ...))
+             [((~var c* (clause #'lib #'require/typed)) (... ...))
               #:with (req* (... ...))
                      (for/list ([req (in-list (syntax-e #'(c*.req (... ...))))]
                                 #:when (syntax-e req))
