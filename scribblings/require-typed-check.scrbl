@@ -55,6 +55,21 @@
 (require 't)
 ]
 
+@defmodule[require-typed-check/deep]
+
+@defform[(require/typed/check/deep m rt-clause ...)]{}
+
+@defmodule[require-typed-check/shallow]
+
+@defform[(require/typed/check/shallow m rt-clause ...)]{}
+
+@defmodule[require-typed-check/optional]
+
+@defform[(require/typed/check/optional m rt-clause ...)]{}
+
+@defmodule[require-typed-check/unsafe]
+
+@defform[(unsafe-require/typed/check m rt-clause ...)]{}
 
 @section{Type-Boundary Instrumentation}
 

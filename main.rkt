@@ -1,8 +1,8 @@
 #lang typed/racket/base
 
 (require
-  (only-in require-typed-check/private/require-typed-check
-    require/typed/check))
+  (rename-in require-typed-check/deep
+    (require/typed/check/deep require/typed/check)))
 
 (provide
   require/typed/check)
