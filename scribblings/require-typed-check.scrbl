@@ -99,7 +99,7 @@ To choose a behavior, use one of the following @racket[require/typed/check] vari
 @section{Type Boundary Instrumentation}
 
 To disable @racket[require/typed/check], set the environment variable
- @as-index{@litchar{DISABLE_REQUIRE_TYPED_CHECK}} to any kind of value.
+ @as-index{@litchar{DISABLE_REQUIRE_TYPED_CHECK}} to any non-null value.
 This causes all @racket[require/typed/check] forms to expand to
  @racket[require/typed] forms.
 
